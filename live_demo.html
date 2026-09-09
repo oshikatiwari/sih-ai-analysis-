@@ -47,6 +47,11 @@
           </select>
         </div>
 
+        <!-- Integrated Audio Voice Prompt Toggle -->
+        <button id="audio-toggle-btn" onclick="toggleAudio()" class="px-3 py-1.5 text-xs font-bold rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition flex items-center gap-1.5 shadow-sm">
+          <span>🔊 Integrated Voice: ON</span>
+        </button>
+
       </div>
     </header>
 
@@ -104,14 +109,9 @@
             <!-- Cards generated dynamically -->
           </div>
 
-          <!-- Warm Patient Encouragement & Audio Prompt -->
-          <div id="patient-encouragement-banner" class="bg-emerald-500/10 border border-emerald-500/20 rounded-xl p-4 text-center space-y-2">
-            <p id="active-patient-prompt" class="text-emerald-700 dark:text-emerald-300 font-bold text-lg">"Wonderful effort! You are doing great. Let's enjoy another fun memory activity!"</p>
-            <div class="flex items-center justify-center gap-2 pt-1">
-              <button onclick="speakVoicePrompt()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-1.5 rounded-full flex items-center gap-1.5 transition shadow-sm">
-                <span>🔊 Read Voice Prompt</span>
-              </button>
-            </div>
+          <!-- Integrated Patient Encouragement Toast/Headline -->
+          <div class="text-center pt-2">
+            <p id="active-patient-prompt" class="text-emerald-600 dark:text-emerald-400 font-medium text-sm transition-all duration-300">"Wonderful effort! You are doing great. Let's enjoy another fun memory activity!"</p>
           </div>
         </div>
 
@@ -365,6 +365,42 @@
     let selectedLang = 'english';
     let currentRoleMode = 'patient';
     let gameDeckType = 'family';
+    let audioEnabled = true;
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      const btn = document.getElementById('audio-toggle-btn');
+      if (btn) {
+        btn.innerHTML = audioEnabled ? '<span>🔊 Integrated Voice: ON</span>' : '<span>🔇 Voice: OFF</span>';
+        btn.className = audioEnabled 
+          ? "px-3 py-1.5 text-xs font-bold rounded-xl bg-indigo-600/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/20 hover:bg-indigo-500/20 transition flex items-center gap-1.5 shadow-sm"
+          : "px-3 py-1.5 text-xs font-bold rounded-xl bg-gray-500/10 text-gray-500 border border-gray-500/20 transition flex items-center gap-1.5";
+      }
+      if (audioEnabled) {
+        speakText(selectedLang === 'hindi' ? 'ध्वनि मार्गदर्शन सक्रिय है' : 'Integrated voice guidance active');
+      } else {
+        if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      }
+    }
+
+    function speakText(text) {
+      if (!audioEnabled || !text) return;
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        const langMap = {
+          english: 'en-US',
+          hindi: 'hi-IN',
+          assamese: 'bn-IN',
+          mizo: 'en-IN',
+          khasi: 'en-IN'
+        };
+        utterance.lang = langMap[selectedLang] || 'en-US';
+        utterance.rate = 0.95;
+        utterance.pitch = 1.0;
+        window.speechSynthesis.speak(utterance);
+      }
+    }
 
     const familyPhotoCards = [
       { name: "Grandson Aarav", tag: "Grandson", emoji: "👶", color: "from-blue-500 to-indigo-600" },
@@ -446,6 +482,15 @@
       document.getElementById('game-instruction').innerText = dict.gameInstruction;
       document.getElementById('btn-restart').innerText = dict.btnRestart;
 
+      const langConfirms = {
+        english: "Language changed to English.",
+        hindi: "भाषा हिंदी में चुनी गई है।",
+        assamese: "অসমীয়া ভাষা সক্ৰিয় কৰা হৈছে।",
+        mizo: "Tawng Mizo a thlan a ni.",
+        khasi: "Ktien Khasi la jied."
+      };
+      speakText(langConfirms[lang] || langConfirms['english']);
+
       updateEncouragement(currentDifficulty);
     }
 
@@ -507,6 +552,9 @@
       innerEl.classList.add('flipped');
       flippedCards.push(innerEl);
 
+      const name = innerEl.getAttribute('data-name');
+      speakText(name);
+
       if (flippedCards.length === 2) {
         attempts++;
         document.getElementById('hud-attempts').innerText = attempts;
@@ -518,6 +566,15 @@
           flippedCards[0].classList.add('matched');
           flippedCards[1].classList.add('matched');
           flippedCards = [];
+          
+          const matchPhrases = {
+            english: "Great match! " + name1,
+            hindi: "उत्कृष्ट जोड़ा! " + name1,
+            assamese: "সুন্দৰ মিলন! " + name1,
+            mizo: "A inrem tha hle mai! " + name1,
+            khasi: "Jingiaishai bha! " + name1
+          };
+          speakText(matchPhrases[selectedLang] || matchPhrases['english']);
           evaluateAIInference();
         } else {
           errors++;
@@ -572,19 +629,11 @@
       const dict = languagePrompts[selectedLang] || languagePrompts['english'];
       const activePromptEl = document.getElementById('active-patient-prompt');
 
-      if (diff === 'hard') activePromptEl.innerText = dict.hardPrompt;
-      else if (diff === 'medium') activePromptEl.innerText = dict.mediumPrompt;
-      else activePromptEl.innerText = dict.easyPrompt;
-    }
+      let text = dict.mediumPrompt;
+      if (diff === 'hard') text = dict.hardPrompt;
+      else if (diff === 'easy') text = dict.easyPrompt;
 
-    function speakVoicePrompt() {
-      const promptText = document.getElementById('active-patient-prompt').innerText;
-      if ('speechSynthesis' in window) {
-        const utterance = new SpeechSynthesisUtterance(promptText);
-        window.speechSynthesis.speak(utterance);
-      } else {
-        alert("Audio voice prompt: " + promptText);
-      }
+      if (activePromptEl) activePromptEl.innerText = text;
     }
 
     function resetGame() {
@@ -597,12 +646,16 @@
       studioGrid.innerHTML = '';
       familyPhotoCards.forEach((item) => {
         const card = document.createElement('div');
-        card.className = `bg-gradient-to-br ${item.color} rounded-2xl p-5 text-white space-y-2 shadow-sm relative overflow-hidden`;
+        card.className = `bg-gradient-to-br ${item.color} rounded-2xl p-5 text-white space-y-2 shadow-sm relative overflow-hidden cursor-pointer hover:scale-[1.02] transition-transform`;
+        card.onclick = () => speakText(item.name + ", " + item.tag);
         card.innerHTML = `
-          <div class="text-4xl">${item.emoji}</div>
+          <div class="flex items-center justify-between">
+            <div class="text-4xl">${item.emoji}</div>
+            <span class="text-xs bg-white/20 px-2 py-0.5 rounded-full font-mono">🔊 Tap Voice</span>
+          </div>
           <h3 class="text-lg font-bold">${item.name}</h3>
           <span class="inline-block bg-white/20 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">${item.tag}</span>
-          <p class="text-[11px] opacity-90">Audio voice tag active in ${selectedLang.toUpperCase()}</p>
+          <p class="text-[11px] opacity-90">Integrated voice prompt in ${selectedLang.toUpperCase()}</p>
         `;
         studioGrid.appendChild(card);
       });
