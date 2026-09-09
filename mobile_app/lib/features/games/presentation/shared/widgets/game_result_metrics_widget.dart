@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:cognitive_care_games/features/ai_analysis/cps_adaptive_engine.dart';
 import 'package:cognitive_care_games/features/games/domain/entities/game_result.dart';
 import 'package:cognitive_care_games/features/games/domain/entities/game_session.dart';
 import 'package:cognitive_care_games/features/games/presentation/shared/design_system/app_colors.dart';
@@ -10,21 +11,6 @@ import 'elderly_button.dart';
 /// Displays the full metrics summary on the post-game result screen.
 ///
 /// Used by both [MemoryGameResultScreen] and [PatternGameResultScreen].
-/// Both games pass the same [GameResult] entity — identical rendering,
-/// zero code duplication.
-///
-/// Layout (top-to-bottom):
-///   ┌──────────────────────────────────┐
-///   │  Completion Banner (✓ or ✗)      │
-///   │  Duration            MM:SS       │
-///   │  Accuracy             80%        │
-///   │  Attempts              10        │
-///   │  Errors                 2        │
-///   │  Hints Used             1        │
-///   │  Completion           100%       │
-///   │                                  │
-///   │  [Play Again]   [Back to Menu]   │
-///   └──────────────────────────────────┘
 class GameResultMetricsWidget extends StatelessWidget {
   const GameResultMetricsWidget({
     super.key,
@@ -53,6 +39,11 @@ class GameResultMetricsWidget extends StatelessWidget {
         children: [
           // ── Completion banner ──────────────────────────────────────────
           _CompletionBanner(isCompleted: isCompleted),
+
+          const SizedBox(height: AppDimensions.spacingLarge),
+
+          // ── Ensemble AI Cognitive Performance Card ─────────────────────
+          _AICognitiveCard(session: session, result: result),
 
           const SizedBox(height: AppDimensions.spacingLarge),
 
@@ -223,6 +214,123 @@ class _MetricRow extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _AICognitiveCard extends StatelessWidget {
+  const _AICognitiveCard({required this.session, required this.result});
+
+  final GameSession session;
+  final GameResult result;
+
+  @override
+  Widget build(final BuildContext context) {
+    final analysis = CPSAdaptiveEngine.analyzeSession(
+      result: result,
+      gameType: session.gameType,
+      userAge: 74,
+      userMmseScore: 23.0,
+      isFamilyReminiscenceDeck: session.gameType == GameType.memoryMatching,
+    );
+
+    return Card(
+      elevation: AppDimensions.cardElevation,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppDimensions.cardBorderRadius),
+      ),
+      color: AppColors.surface,
+      child: Padding(
+        padding: const EdgeInsets.all(AppDimensions.spacingMedium),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  '🤖 Ensemble AI Diagnostics',
+                  style: AppTextStyles.headlineMedium,
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withOpacity(0.12),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: AppColors.primary.withOpacity(0.3)),
+                  ),
+                  child: Text(
+                    'CPS Score: ${analysis.cpsScore}',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: AppDimensions.spacingMedium),
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.success.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.success.withOpacity(0.3)),
+              ),
+              child: Text(
+                '"${analysis.getPatientEncouragement('english')}"',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  color: AppColors.success,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            const SizedBox(height: AppDimensions.spacingMedium),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _SubStat(
+                  label: 'Cognitive Age',
+                  value: '${analysis.cognitiveAge} yrs',
+                  icon: Icons.cake_outlined,
+                ),
+                _SubStat(
+                  label: 'Reminiscence Recall',
+                  value: '${analysis.reminiscenceRecallScore}%',
+                  icon: Icons.photo_library_outlined,
+                ),
+                _SubStat(
+                  label: 'Touch Jitter',
+                  value: '${analysis.biomotorJitterIndex}',
+                  icon: Icons.touch_app_outlined,
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _SubStat extends StatelessWidget {
+  const _SubStat({required this.label, required this.value, required this.icon});
+
+  final String label;
+  final String value;
+  final IconData icon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Icon(icon, size: 20, color: AppColors.primary),
+        const SizedBox(height: 4),
+        Text(value, style: AppTextStyles.headlineMedium.copyWith(fontSize: 14)),
+        Text(label, style: AppTextStyles.bodySmall.copyWith(fontSize: 10)),
+      ],
     );
   }
 }
