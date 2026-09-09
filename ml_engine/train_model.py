@@ -40,7 +40,7 @@ def train_and_export_models():
     difficulty_map = {"easy": 0, "medium": 1, "hard": 2}
     df["difficulty_target"] = df["next_adaptive_difficulty"].map(difficulty_map)
 
-    # High-Dimensional Feature Vector
+    # 22 High-Dimensional Feature Vector (including Motor Jitter & Speech Acoustic Features)
     feature_cols = [
         "age",
         "education_level",
@@ -57,6 +57,8 @@ def train_and_export_models():
         "spatial_proximity_error_score",
         "span_memory_capacity",
         "flip_latency_variance_ms",
+        "motor_jitter_index",
+        "speech_hesitation_score",
         "hints_used",
         "completion_rate",
         "accuracy_speed_ratio",
@@ -115,7 +117,7 @@ def train_and_export_models():
     joblib.dump(lang_le, os.path.join(models_dir, "language_encoder.pkl"))
 
     meta_info = {
-        "model_version": "3.0.0-Ensemble",
+        "model_version": "4.0.0-Ensemble-Edge",
         "sih_problem_statement": "SIH26003",
         "supported_languages": ["Hindi", "English", "Mizo", "Khasi", "Assamese"],
         "feature_cols": feature_cols,
