@@ -28,8 +28,13 @@ class CPSAnalyzer:
 
     def analyze_session(self, telemetry: dict, session_history=None) -> dict:
         """
-        Analyzes game telemetry with 5-language localized prompts, cognitive breakdown,
-        AI activity recommendations, and longitudinal trend analysis.
+        Comprehensive AI Analysis featuring:
+          - Multi-domain CPS Scoring (0-100)
+          - Hidden Adaptive Difficulty (Easy/Medium/Hard)
+          - Family Reminiscence Therapy Telemetry Evaluation
+          - Circadian & Sundowning Pattern Analysis
+          - 30-Day & 90-Day Cognitive Trajectory Projections
+          - 5-Language Localized Voice Guidance
         """
         age = telemetry.get("age", 72)
         education_level = telemetry.get("education_level", 2)
@@ -43,6 +48,10 @@ class CPSAnalyzer:
         errors = int(telemetry.get("errors", 1))
         hints_used = int(telemetry.get("hints_used", 0))
         completion_rate = float(telemetry.get("completion_rate", 0.95))
+
+        # Personal Reminiscence Specific Metrics
+        is_reminiscence_game = telemetry.get("is_reminiscence_game", False)
+        family_photo_recognition_rate = float(telemetry.get("family_photo_recognition_rate", accuracy))
 
         try:
             game_type_enc = int(self.game_type_le.transform([game_type])[0])
@@ -81,6 +90,11 @@ class CPSAnalyzer:
 
         # AI Model Inference
         predicted_cps = float(self.cps_model.predict(features_scaled)[0])
+        
+        # Boost score slightly if family reminiscence recognition rate is high (Autobiographical Memory Retention)
+        if is_reminiscence_game and family_photo_recognition_rate > 0.8:
+            predicted_cps += 3.5
+
         predicted_cps = round(float(np.clip(predicted_cps, 0.0, 100.0)), 2)
 
         predicted_diff_idx = int(self.diff_model.predict(features_scaled)[0])
@@ -91,6 +105,7 @@ class CPSAnalyzer:
         imp_label = "High Risk / Impaired" if imp_pred == 1 else "Normal / Stable"
 
         # Multi-domain Cognitive Breakdown Sub-scores
+        autobiographical_reminiscence_score = round(float(np.clip(family_photo_recognition_rate * 100.0, 10.0, 100.0)), 1)
         memory_retention = round(float(np.clip((accuracy * 70.0) + (completion_rate * 30.0) - (hints_used * 3.0), 10.0, 100.0)), 1)
         reaction_latency = round(float(np.clip(100.0 - (response_time_ms / 1800.0), 10.0, 100.0)), 1)
         executive_function = round(float(np.clip((mmse_score / 30.0 * 50.0) + (accuracy * 50.0) - (errors * 2.0), 10.0, 100.0)), 1)
@@ -98,31 +113,36 @@ class CPSAnalyzer:
 
         fatigue_index = round(float(np.clip((response_time_ms / 60000.0) * (hints_used + 1) * (errors + 1) / 10.0, 0.0, 1.0)), 2)
 
-        # Longitudinal Trend Tracking Calculation
-        longitudinal_trend = self._calculate_longitudinal_trend(predicted_cps, session_history)
+        # AI Feature 1: Circadian & Sundowning Risk Pattern Detector
+        time_of_day_hour = telemetry.get("time_of_day_hour", 10) # 0 to 23
+        circadian_analysis = self._analyze_circadian_sundowning(time_of_day_hour, accuracy, fatigue_index)
 
-        # AI-Recommended Tailored Activities & Routine Guidance
-        recommended_activities = self._get_ai_activity_recommendations(predicted_cps, fatigue_index, next_difficulty)
+        # AI Feature 2: 30-Day & 90-Day Longitudinal Cognitive Trajectory Predictor
+        projections = self._predict_future_trajectory(predicted_cps, session_history)
 
-        # 5-Language Localized Patient Guidance (Hindi, English, Mizo, Khasi, Assamese)
+        # AI Feature 3: Caregiver Reminiscence Therapy Insights & Activities
+        reminiscence_insights = self._get_reminiscence_therapy_insights(autobiographical_reminiscence_score, predicted_cps)
+
+        # Localized 5-language patient prompts
         localized_prompts = self._get_5_language_guidance(next_difficulty)
         active_guidance = localized_prompts.get(pref_lang.lower(), localized_prompts["english"])
 
         return {
             "cps_score": predicted_cps,
             "cognitive_sub_scores": {
+                "autobiographical_reminiscence_score": autobiographical_reminiscence_score,
                 "memory_retention_index": memory_retention,
                 "reaction_latency_score": reaction_latency,
                 "executive_function_index": executive_function,
                 "error_recovery_rate": error_recovery
             },
             "hidden_adaptive_difficulty": next_difficulty,
-            "patient_ui_badge_visible": False, # Enforce SIH26003 Patient Protection Policy
+            "patient_ui_badge_visible": False, # Patient protection constraint
             "selected_language": pref_lang,
             "patient_active_guidance": active_guidance,
-            "all_language_guidance_prompts": localized_prompts,
-            "longitudinal_trend": longitudinal_trend,
-            "ai_activity_recommendations": recommended_activities,
+            "circadian_sundowning_analysis": circadian_analysis,
+            "trajectory_projections": projections,
+            "caregiver_reminiscence_therapy": reminiscence_insights,
             "caregiver_dashboard": {
                 "cognitive_impairment_risk": imp_label,
                 "fatigue_index": fatigue_index,
@@ -131,74 +151,57 @@ class CPSAnalyzer:
             }
         }
 
-    def _calculate_longitudinal_trend(self, current_cps: float, session_history: list = None) -> dict:
+    def _analyze_circadian_sundowning(self, hour: int, accuracy: float, fatigue: float) -> dict:
+        is_evening = hour >= 16 or hour <= 4
+        sundowning_risk = "Moderate" if is_evening and (accuracy < 0.65 or fatigue > 0.5) else "Low"
+        
+        if hour >= 8 and hour <= 12:
+            optimal_window = "Morning (08:00 - 12:00) - Peak Cognitive Alertness"
+        elif hour >= 13 and hour <= 16:
+            optimal_window = "Early Afternoon - Moderate Focus"
+        else:
+            optimal_window = "Evening - Rest Recommended (High Sundowning Risk Period)"
+
+        return {
+            "current_session_hour": hour,
+            "optimal_cognitive_exercise_window": optimal_window,
+            "sundowning_syndrome_risk": sundowning_risk,
+            "clinical_advice": "Schedule cognitive games during peak morning alertness (09:00 - 11:00 AM) to maximize positive reminiscence therapy."
+        }
+
+    def _predict_future_trajectory(self, current_cps: float, session_history: list = None) -> dict:
         if not session_history:
-            history = [current_cps - 4.0, current_cps - 2.0, current_cps]
+            history = [current_cps - 3.0, current_cps - 1.5, current_cps]
         else:
             history = session_history + [current_cps]
 
-        avg_delta = (history[-1] - history[0]) / max(len(history) - 1, 1)
+        slope = (history[-1] - history[0]) / max(len(history) - 1, 1)
 
-        if avg_delta > 1.5:
-            direction = "Improving"
-            status_desc = "Cognitive trajectory shows steady upward progress (+%.1f CPS)." % avg_delta
-        elif avg_delta < -1.5:
-            direction = "Declining"
-            status_desc = "Cognitive trajectory shows slight decline (-%.1f CPS). Rest recommended." % abs(avg_delta)
-        else:
-            direction = "Stable"
-            status_desc = "Cognitive performance remains highly consistent and stable."
+        projected_30d = round(float(np.clip(current_cps + (slope * 4.0), 10.0, 100.0)), 1)
+        projected_90d = round(float(np.clip(current_cps + (slope * 12.0), 10.0, 100.0)), 1)
 
         return {
-            "direction": direction,
-            "delta_per_session": round(avg_delta, 2),
-            "historical_cps_scores": [round(x, 1) for x in history],
-            "clinical_summary": status_desc
+            "historical_cps": [round(x, 1) for x in history],
+            "projected_cps_30_days": projected_30d,
+            "projected_cps_90_days": projected_90d,
+            "velocity_per_week": round(slope * 2.5, 2),
+            "trajectory_status": "Upward Recovery Trajectory" if slope > 0.5 else "Stable Memory Retention" if slope >= -0.5 else "Decline Risk Warning"
         }
 
-    def _get_ai_activity_recommendations(self, cps: float, fatigue: float, difficulty: str) -> list:
-        recommendations = []
-        
-        if fatigue > 0.65:
-            recommendations.append({
-                "activity_name": "Calm Audio Reminiscence & Hydration Rest",
-                "category": "Rest & Caregiver Assist",
-                "duration_mins": 15,
-                "description": "Listen to calming traditional North Eastern folk music and take a hydration break."
-            })
-            recommendations.append({
-                "activity_name": "Family Album Photo Memory Prompts",
-                "category": "Reminiscence Therapy",
-                "duration_mins": 10,
-                "description": "Soft visual cues associating family members with local cultural memories."
-            })
-        elif cps >= 75.0:
-            recommendations.append({
-                "activity_name": "Advanced Spatial Recall & 4x5 Pattern Matrix",
-                "category": "High Cognitive Challenge",
-                "duration_mins": 20,
-                "description": "Challenging multi-object visual memory grids featuring regional flora and fauna."
-            })
-            recommendations.append({
-                "activity_name": "Dual-Task Rhythmic Tap & Sound Sequence",
-                "category": "Executive Function",
-                "duration_mins": 15,
-                "description": "Combines auditory sound sequences with visual tap recall to strengthen working memory."
-            })
+    def _get_reminiscence_therapy_insights(self, reminiscence_score: float, cps: float) -> dict:
+        if reminiscence_score >= 80.0:
+            status = "Strong Autobiographical Memory Recall"
+            guidance = "Patient shows vivid recognition of family photos and personal memories. Continue daily family photo matching."
         else:
-            recommendations.append({
-                "activity_name": "Guided 3x4 Symbol Matching & Voice Assistance",
-                "category": "Guided Memory Training",
-                "duration_mins": 15,
-                "description": "Standard memory matching with audio voice guidance in your chosen regional language."
-            })
-            recommendations.append({
-                "activity_name": "Gentle Physical Stretching & Routine Reminder",
-                "category": "Motor & Physical Health",
-                "duration_mins": 10,
-                "description": "Simple seated arm stretches followed by daily medication and hydration check-in."
-            })
-        return recommendations
+            status = "Moderate Personal Memory Fatigue"
+            guidance = "Pair family photos with familiar audio voice notes (e.g. grandchild voice recording) to stimulate emotional recall."
+
+        return {
+            "family_photo_recognition_score": reminiscence_score,
+            "reminiscence_status": status,
+            "caregiver_action_plan": guidance,
+            "recommended_photo_categories": ["Family Members & Grandchildren", "Hometown & Childhood Places", "Traditional Cultural Celebrations"]
+        }
 
     def _get_5_language_guidance(self, difficulty: str) -> dict:
         prompts = {
@@ -246,16 +249,19 @@ class CPSAnalyzer:
 if __name__ == "__main__":
     analyzer = CPSAnalyzer()
     sample = {
-        "age": 72,
+        "age": 74,
         "preferred_language": "Hindi",
-        "mmse_score": 24.5,
+        "mmse_score": 25.0,
+        "is_reminiscence_game": True,
+        "family_photo_recognition_rate": 0.90,
         "game_type": "memory_matching",
         "accuracy": 0.90,
         "response_time_ms": 28000,
         "attempts": 10,
         "errors": 1,
         "hints_used": 0,
-        "completion_rate": 1.0
+        "completion_rate": 1.0,
+        "time_of_day_hour": 10
     }
     res = analyzer.analyze_session(sample)
     print(json.dumps(res, indent=2, ensure_ascii=False))

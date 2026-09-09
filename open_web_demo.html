@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIH26003 - Multilingual AI Cognitive Gaming Platform</title>
+  <title>SIH26003 - Caregiver Family Reminiscence & AI Platform</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     .card-flip { perspective: 1000px; }
@@ -24,20 +24,18 @@
           <span class="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 text-xs font-semibold px-2.5 py-1 rounded-full border border-indigo-500/20">SIH26003 MDoNER</span>
           <span id="role-badge" class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">👴 Patient Mode (Simplified)</span>
         </div>
-        <h1 id="app-header-title" class="text-2xl font-bold mt-2 text-[var(--foreground)]">AI Cognitive Gaming & Memory Platform</h1>
-        <p id="app-header-sub" class="text-xs text-[var(--muted-foreground)] mt-1">Multi-Domain CPS Scoring & Offline-First Dementia Assistance Platform</p>
+        <h1 id="app-header-title" class="text-2xl font-bold mt-2 text-[var(--foreground)]">AI Cognitive Gaming & Family Reminiscence Platform</h1>
+        <p id="app-header-sub" class="text-xs text-[var(--muted-foreground)] mt-1">Autobiographical Memory Therapy, 5-Language Audio Prompts & Clinical Analytics</p>
       </div>
 
       <!-- Controls: Role Selector & Language Selector -->
       <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
         
-        <!-- Role Mode Switcher (Patient vs Caregiver/Evaluator) -->
         <div class="flex items-center bg-[var(--background)] border border-[var(--border)] rounded-xl p-1 gap-1">
           <button id="role-btn-patient" onclick="setRoleMode('patient')" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-emerald-600 text-white shadow-sm transition">👴 Patient Mode</button>
           <button id="role-btn-caregiver" onclick="setRoleMode('caregiver')" class="px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)] transition">👨‍⚕️ Caregiver / Evaluator Mode</button>
         </div>
 
-        <!-- Language Selector -->
         <div class="flex items-center bg-[var(--background)] border border-[var(--border)] rounded-xl px-3 py-1.5 gap-2">
           <span class="text-xs text-[var(--muted-foreground)] font-medium">🌐 Language:</span>
           <select id="language-selector" onchange="changeLanguage(this.value)" class="bg-transparent text-xs font-bold text-[var(--foreground)] focus:outline-none cursor-pointer">
@@ -52,26 +50,33 @@
       </div>
     </header>
 
-    <!-- Caregiver/Evaluator Only Navigation Tabs -->
+    <!-- Caregiver & Evaluator Navigation Tabs -->
     <div id="evaluator-tab-bar" class="hidden flex bg-[var(--card)] border border-[var(--border)] rounded-xl p-1 gap-1">
-      <button id="tab-game" onclick="switchTab('game')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-sm">🎮 Patient Game</button>
-      <button id="tab-caregiver" onclick="switchTab('caregiver')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">📊 Caregiver & Clinical Dashboard</button>
-      <button id="tab-kaggle" onclick="switchTab('kaggle')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">📁 Kaggle Dataset Explorer (SIH Audit)</button>
+      <button id="tab-game" onclick="switchTab('game')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-sm">🎮 Patient Reminiscence Game</button>
+      <button id="tab-reminiscence" onclick="switchTab('reminiscence')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">📸 Family Photo Studio</button>
+      <button id="tab-caregiver" onclick="switchTab('caregiver')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">📊 Caregiver & Trajectory Dashboard</button>
+      <button id="tab-kaggle" onclick="switchTab('kaggle')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">📁 Kaggle Dataset Explorer</button>
     </div>
 
-    <!-- TAB 1: PATIENT GAMEPLAY DEMO -->
+    <!-- TAB 1: PATIENT GAMEPLAY DEMO (Family Reminiscence & Cultural Mode) -->
     <main id="section-game" class="space-y-5">
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         <!-- Game Canvas & Interactions -->
-        <div id="game-container-card" class="lg:col-span-3 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-6 space-y-4">
-          <div class="flex items-center justify-between">
+        <div id="game-container-card" class="lg:col-span-3 bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
             <div>
-              <h2 id="game-title" class="text-xl font-bold text-[var(--foreground)]">Memory Matching Journey</h2>
-              <p id="game-instruction" class="text-xs text-[var(--muted-foreground)]">Tap matching pairs of North Eastern cultural symbols</p>
+              <h2 id="game-title" class="text-xl font-bold text-[var(--foreground)]">Family Memory Matching Journey</h2>
+              <p id="game-instruction" class="text-xs text-[var(--muted-foreground)]">Tap matching pairs of family memories and regional symbols</p>
             </div>
-            <button onclick="resetGame()" id="btn-restart" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl transition-colors shadow-sm">Restart Game</button>
+
+            <!-- Game Deck Toggle (Family Photos vs Regional Symbols) -->
+            <div class="flex items-center bg-[var(--background)] border border-[var(--border)] rounded-xl p-1 gap-1">
+              <button id="deck-btn-family" onclick="setGameDeck('family')" class="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-indigo-600 text-white shadow-sm">📸 Family Photos</button>
+              <button id="deck-btn-symbols" onclick="setGameDeck('symbols')" class="px-2.5 py-1 text-[11px] font-bold rounded-lg text-[var(--muted-foreground)]">🌺 Regional Symbols</button>
+              <button onclick="resetGame()" id="btn-restart" class="ml-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 text-xs font-bold px-3 py-1 rounded-lg">Restart</button>
+            </div>
           </div>
 
           <!-- Patient Friendly Game HUD -->
@@ -114,21 +119,25 @@
         <div id="ai-monitor-sidebar" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
             <h3 class="font-bold text-sm text-[var(--foreground)]">🤖 Real-Time AI ML Engine</h3>
-            <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded font-bold">XGBoost & RF v2.0</span>
+            <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded font-bold">XGBoost v2.5</span>
           </div>
 
           <!-- Live CPS Score & Gauge Breakdown -->
           <div class="space-y-3 bg-[var(--background)] border border-[var(--border)] p-4 rounded-xl">
             <div class="text-center">
               <span class="text-xs text-[var(--muted-foreground)] font-medium">Cognitive Performance Score (CPS)</span>
-              <div id="cps-score-display" class="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono my-1">82.4</div>
+              <div id="cps-score-display" class="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono my-1">86.5</div>
               <div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
-                <div id="cps-progress-bar" class="bg-indigo-600 h-full transition-all duration-500" style="width: 82.4%;"></div>
+                <div id="cps-progress-bar" class="bg-indigo-600 h-full transition-all duration-500" style="width: 86.5%;"></div>
               </div>
             </div>
 
             <!-- Cognitive Sub-scores Breakdown -->
             <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-[var(--border)]">
+              <div>
+                <span class="text-[var(--muted-foreground)] block">Family Reminiscence:</span>
+                <span id="sub-reminiscence" class="font-mono font-bold text-amber-500">92.0 / 100</span>
+              </div>
               <div>
                 <span class="text-[var(--muted-foreground)] block">Memory Retention:</span>
                 <span id="sub-memory" class="font-mono font-bold text-indigo-500">88.5 / 100</span>
@@ -136,10 +145,6 @@
               <div>
                 <span class="text-[var(--muted-foreground)] block">Reaction Speed:</span>
                 <span id="sub-speed" class="font-mono font-bold text-emerald-500">82.0 / 100</span>
-              </div>
-              <div>
-                <span class="text-[var(--muted-foreground)] block">Executive Function:</span>
-                <span id="sub-executive" class="font-mono font-bold text-blue-500">84.2 / 100</span>
               </div>
               <div>
                 <span class="text-[var(--muted-foreground)] block">Error Recovery:</span>
@@ -158,96 +163,101 @@
               <span class="text-[var(--muted-foreground)]">Patient UI Badge:</span>
               <span class="font-bold text-amber-500">HIDDEN (Zero Stigma)</span>
             </div>
-            <div class="flex items-center justify-between">
-              <span class="text-[var(--muted-foreground)]">Caregiver Risk:</span>
-              <span id="ai-risk-status" class="font-semibold text-emerald-500">Normal / Stable</span>
-            </div>
           </div>
 
           <!-- AI Activity Recommendation Card -->
           <div class="bg-indigo-500/10 border border-indigo-500/20 p-3 rounded-xl space-y-1 text-xs">
             <div class="flex items-center justify-between font-bold text-indigo-600 dark:text-indigo-400">
               <span>💡 AI Recommended Activity:</span>
-              <span id="rec-category" class="text-[10px] bg-indigo-500/20 px-1.5 py-0.5 rounded">Executive Function</span>
+              <span id="rec-category" class="text-[10px] bg-indigo-500/20 px-1.5 py-0.5 rounded">Family Reminiscence</span>
             </div>
-            <p id="rec-title" class="font-semibold text-[var(--foreground)]">Dual-Task Rhythmic Tap & Sound Sequence</p>
-            <p id="rec-desc" class="text-[11px] text-[var(--muted-foreground)]">Combines auditory sound sequences with visual tap recall to strengthen working memory.</p>
+            <p id="rec-title" class="font-semibold text-[var(--foreground)]">Family Photo Match & Grandchild Voice Recording</p>
+            <p id="rec-desc" class="text-[11px] text-[var(--muted-foreground)]">Pair family photo cards with voice prompts to evoke positive autobiographical recall.</p>
           </div>
-
-          <!-- Quick Patient Simulations -->
-          <div class="space-y-2 pt-1">
-            <span class="text-[11px] font-semibold text-[var(--muted-foreground)] block">Quick Simulations:</span>
-            <div class="grid grid-cols-3 gap-1.5 text-[10px]">
-              <button onclick="simulateScenario('high')" class="bg-[var(--background)] hover:bg-[var(--border)] border border-[var(--border)] p-1.5 rounded text-center font-medium">🌟 High Focus</button>
-              <button onclick="simulateScenario('mci')" class="bg-[var(--background)] hover:bg-[var(--border)] border border-[var(--border)] p-1.5 rounded text-center font-medium">⚠️ MCI Stage</button>
-              <button onclick="simulateScenario('fatigue')" class="bg-[var(--background)] hover:bg-[var(--border)] border border-[var(--border)] p-1.5 rounded text-center font-medium">🔴 High Fatigue</button>
-            </div>
-          </div>
-
         </div>
 
       </div>
     </main>
 
-    <!-- TAB 2: CAREGIVER DASHBOARD & LONGITUDINAL TRENDS -->
+    <!-- TAB 2: CAREGIVER FAMILY PHOTO REMINISCENCE STUDIO -->
+    <section id="section-reminiscence" class="hidden space-y-5">
+      <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-bold text-[var(--foreground)]">📸 Caregiver Family Reminiscence Photo Studio</h2>
+            <p class="text-xs text-[var(--muted-foreground)]">Safely upload family photos, grandchildren names, and voice notes to create personal memory games for the patient.</p>
+          </div>
+          <button onclick="addSampleFamilyPhoto()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">
+            + Add New Family Memory
+          </button>
+        </div>
+
+        <!-- Family Photos Library Grid -->
+        <div id="family-photos-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+          <!-- Dynamically populated family photo cards -->
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: CAREGIVER DASHBOARD & AI TRAJECTORY PROJECTIONS -->
     <section id="section-caregiver" class="hidden space-y-5">
       <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-5">
         <div>
           <h2 class="text-xl font-bold text-[var(--foreground)]">Caregiver & Clinical Analytics Dashboard</h2>
-          <p class="text-xs text-[var(--muted-foreground)]">Longitudinal cognitive trajectory, fatigue index, and multi-domain performance analytics</p>
+          <p class="text-xs text-[var(--muted-foreground)]">Circadian sundowning analysis, 30d/90d AI trajectory projections, and fatigue tracking</p>
         </div>
 
+        <!-- 4 Key Diagnostic Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
-            <span class="text-xs text-[var(--muted-foreground)]">Avg Composite CPS</span>
-            <div class="text-2xl font-bold text-indigo-500 font-mono mt-1">78.4</div>
-            <span class="text-[10px] text-emerald-500">+4.2% trajectory</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Current Composite CPS</span>
+            <div class="text-2xl font-bold text-indigo-500 font-mono mt-1">82.5</div>
+            <span class="text-[10px] text-emerald-500">Upward Recovery Trajectory</span>
           </div>
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
-            <span class="text-xs text-[var(--muted-foreground)]">Memory Retention</span>
-            <div class="text-2xl font-bold text-blue-500 font-mono mt-1">84.2</div>
-            <span class="text-[10px] text-emerald-500">Stable recall</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Projected 30-Day CPS</span>
+            <div class="text-2xl font-bold text-emerald-500 font-mono mt-1">89.0</div>
+            <span class="text-[10px] text-emerald-500">+6.5 predicted gain</span>
           </div>
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
-            <span class="text-xs text-[var(--muted-foreground)]">Fatigue Index</span>
-            <div class="text-2xl font-bold text-emerald-500 font-mono mt-1">0.14</div>
-            <span class="text-[10px] text-emerald-500">Low cognitive stress</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Optimal Peak Exercise Window</span>
+            <div class="text-xs font-bold text-[var(--foreground)] mt-1">09:00 - 11:30 AM</div>
+            <span class="text-[10px] text-emerald-500">Low Sundowning Risk</span>
           </div>
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
-            <span class="text-xs text-[var(--muted-foreground)]">Backend Adaptive Level</span>
-            <div class="text-2xl font-bold text-purple-500 font-mono mt-1">Medium (4x4)</div>
-            <span class="text-[10px] text-amber-500 font-mono">Hidden on Patient UI</span>
+            <span class="text-xs text-[var(--muted-foreground)]">Family Reminiscence Recall</span>
+            <div class="text-2xl font-bold text-amber-500 font-mono mt-1">92.0%</div>
+            <span class="text-[10px] text-emerald-500">Vivid memory recognition</span>
           </div>
         </div>
 
         <!-- Longitudinal Trend Chart -->
         <div class="bg-[var(--background)] border border-[var(--border)] p-4 rounded-xl space-y-3">
           <div class="flex items-center justify-between">
-            <h3 class="text-xs font-bold text-[var(--foreground)]">📈 Longitudinal Cognitive Trajectory (10-Session Trend)</h3>
-            <span class="text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Direction: Improving (+2.1 CPS/session)</span>
+            <h3 class="text-xs font-bold text-[var(--foreground)]">📈 Longitudinal Cognitive Trajectory (Historical & 90-Day AI Projection)</h3>
+            <span class="text-[11px] font-semibold text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">Trajectory: Upward Recovery (+3.75 CPS/week)</span>
           </div>
           <div class="h-32 flex items-end justify-between gap-2 pt-4 px-2 border-b border-l border-[var(--border)]">
             <div class="bg-indigo-500/80 rounded-t w-full h-[58%]" title="Session 1: 58"></div>
             <div class="bg-indigo-500/80 rounded-t w-full h-[62%]" title="Session 2: 62"></div>
             <div class="bg-indigo-500/80 rounded-t w-full h-[66%]" title="Session 3: 66"></div>
             <div class="bg-indigo-500/80 rounded-t w-full h-[70%]" title="Session 4: 70"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[74%]" title="Session 5: 74"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[72%]" title="Session 6: 72"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[78%]" title="Session 7: 78"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[82%]" title="Session 8: 82"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[80%]" title="Session 9: 80"></div>
-            <div class="bg-indigo-500 rounded-t w-full h-[85%]" title="Session 10: 85"></div>
+            <div class="bg-indigo-500/80 rounded-t w-full h-[75%]" title="Session 5: 75"></div>
+            <div class="bg-indigo-500/80 rounded-t w-full h-[82%]" title="Session 6: 82"></div>
+            <div class="bg-emerald-500/70 border-t-2 border-dashed border-emerald-400 rounded-t w-full h-[88%]" title="AI Projected 30 Days: 88"></div>
+            <div class="bg-emerald-500/70 border-t-2 border-dashed border-emerald-400 rounded-t w-full h-[95%]" title="AI Projected 90 Days: 95"></div>
           </div>
           <div class="flex justify-between text-[10px] text-[var(--muted-foreground)] px-1">
-            <span>Session 1</span>
-            <span>Session 5</span>
-            <span>Session 10 (Latest)</span>
+            <span>Past Sessions</span>
+            <span>Current (Today)</span>
+            <span class="text-emerald-500 font-bold">AI 30-Day Projection</span>
+            <span class="text-emerald-500 font-bold">AI 90-Day Projection</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- TAB 3: KAGGLE DATASET EXPLORER -->
+    <!-- TAB 4: KAGGLE DATASET EXPLORER -->
     <section id="section-kaggle" class="hidden space-y-5">
       <div class="bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
@@ -285,50 +295,55 @@
   <script>
     const languagePrompts = {
       english: {
-        headerTitle: "AI Cognitive Gaming & Memory Platform",
-        headerSub: "Multi-Domain CPS Scoring & Offline-First Dementia Assistance Platform",
-        gameTitle: "Memory Matching Journey",
-        gameInstruction: "Tap matching pairs of North Eastern cultural symbols",
+        headerTitle: "AI Cognitive Gaming & Family Reminiscence Platform",
+        headerSub: "Autobiographical Memory Therapy, 5-Language Audio Prompts & Clinical Analytics",
+        gameTitleFamily: "Family Memory Matching Journey",
+        gameTitleSymbols: "Cultural Symbols Matching Journey",
+        gameInstruction: "Tap matching pairs of family memories and regional symbols",
         btnRestart: "Restart Game",
         easyPrompt: '"Wonderful effort! You are doing great. Let\'s enjoy another fun memory activity!"',
         mediumPrompt: '"Fantastic progress! Your focus is super sharp today. Let\'s keep exploring!"',
         hardPrompt: '"Outperforming excellence! You are a master memory explorer today!"'
       },
       hindi: {
-        headerTitle: "एआई संज्ञानात्मक गेमिंग और स्मृति मंच",
-        headerSub: "मल्टी-डोमेन सीपीएस स्कोरिंग और पूर्वोत्तर डिमेंशिया सहायता मंच",
-        gameTitle: "स्मृति मिलान यात्रा",
-        gameInstruction: "पूर्वोत्तर सांस्कृतिक प्रतीकों के मिलते-जुलते जोड़ों पर टैप करें",
+        headerTitle: "एआई संज्ञानात्मक गेमिंग और पारिवारिक स्मृति संस्मरण मंच",
+        headerSub: "आत्मकथात्मक स्मृति थेरेपी, 5-भाषा ऑडियो संकेत और नैदानिक विश्लेषण",
+        gameTitleFamily: "पारिवारिक यादें मिलान यात्रा",
+        gameTitleSymbols: "सांस्कृतिक प्रतीक मिलान यात्रा",
+        gameInstruction: "पारिवारिक यादों के मिलते-जुलते जोड़ों पर टैप करें",
         btnRestart: "पुनः आरंभ करें",
         easyPrompt: '"बहुत सुंदर प्रयास! आप बहुत अच्छा खेल रहे हैं। चलिए अगला मजेदार स्मृति खेल खेलते हैं!"',
         mediumPrompt: '"शानदार प्रगति! आपका ध्यान आज बहुत तेज़ है। चलिए आगे बढ़ते हैं!"',
         hardPrompt: '"असाधारण प्रतिभा! आज आप वाकई एक महान स्मृति विजेता हैं!"'
       },
       assamese: {
-        headerTitle: "এআই সংজ্ঞাত্নক গেমিং আৰু স্মৃতি মঞ্চ",
-        headerSub: "বহু-ডমেইন চিপিএছ স্কোৰিং আৰু উত্তৰ-পূব ডিমেনচিয়া সাহায্য মঞ্চ",
-        gameTitle: "স্মৃতি মিলান যাত্ৰা",
-        gameInstruction: "উত্তৰ-পূবৰ সাংস্কৃতিক প্ৰতীকৰ মিল থকা যোৰাবোৰত টেপ কৰক",
+        headerTitle: "এআই সংজ্ঞাত্নক গেমিং আৰু পৰিয়ালৰ স্মৃতি মঞ্চ",
+        headerSub: "আত্মজীৱনীমূলক স্মৃতি থেৰাপী, ৫-ভাষাৰ অডিঅ' নিৰ্দেশনা আৰু বিশ্লেষণ",
+        gameTitleFamily: "পৰিয়ালৰ স্মৃতি মিলন যাত্ৰা",
+        gameTitleSymbols: "সাংস্কৃতিক প্ৰতীক মিলন যাত্ৰা",
+        gameInstruction: "পৰিয়ালৰ স্মৃতিৰ মিল থকা যোৰাবোৰত টেপ কৰক",
         btnRestart: "পুনৰ আৰম্ভ কৰক",
         easyPrompt: '"অতি সুন্দৰ! আপুনি বহুত ভাল খেলিছে। বলক আন এটি ধুনীয়া স্মৃতি খেল খেলো।"',
         mediumPrompt: '"চমৎকার উন্নতি! আপোনাৰ মনোযোগ সঁচাকৈয়ে প্রশংসনীয়।"',
         hardPrompt: '"অসাধাৰণ দক্ষতা! আপুনি আজি সঁচাকৈয়ে এজন মহান স্মৃতি বিজয়ী!"'
       },
       mizo: {
-        headerTitle: "AI Hriatna Zirna Hmunleh Zirlai",
-        headerSub: "CPS Marks, Thuhruk awlsam-harsa inthlak, Caregiver enkawltu tan",
-        gameTitle: "Hriatna Inrem Zuk",
-        gameInstruction: "North East thil chhinchhiahna inang te hi meuh rawh",
+        headerTitle: "AI Hriatna Zirna Hmunleh Chhungkua Hriatrengna",
+        headerSub: "Chhungkaw thlalak hmanga hriatna tihchakna",
+        gameTitleFamily: "Chhungkaw Thlalak Inrem Zuk",
+        gameTitleSymbols: "Hnam Thil Inrem Zuk",
+        gameInstruction: "Chhungkaw thlalak inang te hi meuh rawh",
         btnRestart: "Bul tan thar rawh",
         easyPrompt: '"Thawk tha tak tling i ni! A nuam dang i zir zel ang u."',
         mediumPrompt: '"I puitlinna a tha hle mai! I rilru a fim tha hle."',
         hardPrompt: '"A tha tawpkhawk hle mai! Vawiin chu i thluak a chak zual hle."'
       },
       khasi: {
-        headerTitle: "AI Jingkynmaw bad Jingiarap ha ka bhabri",
-        headerSub: "CPS Marks, Ka jing-ai jingbha haba ialeh kai bad Caregiver Dashboard",
-        gameTitle: "Ka Jingiaishai ha ka Jingkynmaw",
-        gameInstruction: "Kyntuit ki jingpyni ki thain shatei lam mihngi kiba iasnoh lang",
+        headerTitle: "AI Jingkynmaw bad Jingkynmaw iing sem",
+        headerSub: "Ka jingkynmaw ha iing sem bad ka jingkyntu ha ki 5 tylli ki jien",
+        gameTitleFamily: "Ka Jingkynmaw shaphang ka Iingsem",
+        gameTitleSymbols: "Ka Jingiaishai ha ka Jingkynmaw",
+        gameInstruction: "Kyntuit ki dur iingsem kiba iasnoh lang",
         btnRestart: "Sdang biang",
         easyPrompt: '"Ka jingseimot kaba bha shibun! To ngin ia iaid shakhmat paralok."',
         mediumPrompt: '"Ka jingkiew kaba khraw! Ka jingmut jong phi ka long kaba shai halor kiei kiei."',
@@ -337,8 +352,27 @@
     };
 
     let selectedLang = 'english';
-    let currentRoleMode = 'patient'; // 'patient' vs 'caregiver'
-    let symbols = ['🌺', '🌸', '🐘', '🦏', '🏔️', '🎋', '🛶', '🦜', '🍵', '🪕'];
+    let currentRoleMode = 'patient';
+    let gameDeckType = 'family'; // 'family' vs 'symbols'
+
+    const familyPhotoCards = [
+      { name: "Grandson Aarav", tag: "Grandson", emoji: "👶", color: "from-blue-500 to-indigo-600" },
+      { name: "Wife Sunita", tag: "Spouse", emoji: "👰", color: "from-pink-500 to-rose-600" },
+      { name: "Hometown Shillong", tag: "Childhood Home", emoji: "🏡", color: "from-emerald-500 to-teal-600" },
+      { name: "Golden Wedding 1978", tag: "Anniversary", emoji: "💍", color: "from-amber-500 to-orange-600" },
+      { name: "Bihu Celebration", tag: "Festival", emoji: "🪕", color: "from-purple-500 to-violet-600" },
+      { name: "Family Pet Bruno", tag: "Pet", emoji: "🐶", color: "from-cyan-500 to-blue-600" }
+    ];
+
+    const regionalSymbolCards = [
+      { name: "Rhino", tag: "Kaziranga", emoji: "🦏", color: "from-emerald-600 to-teal-700" },
+      { name: "Lotus", tag: "Flora", emoji: "🌺", color: "from-pink-500 to-rose-600" },
+      { name: "Tea Garden", tag: "Assam Tea", emoji: "🍵", color: "from-green-500 to-emerald-600" },
+      { name: "Canoe", tag: "River Brahmaputra", emoji: "🛶", color: "from-blue-500 to-cyan-600" },
+      { name: "Himalayas", tag: "Mountains", emoji: "🏔️", color: "from-sky-500 to-indigo-600" },
+      { name: "Elephant", tag: "Wildlife", emoji: "🐘", color: "from-purple-500 to-indigo-600" }
+    ];
+
     let flippedCards = [];
     let attempts = 0;
     let errors = 0;
@@ -350,11 +384,7 @@
       { id: 'P1000', age: 66, gender: 'Female', lang: 'Assamese', region: 'Urban', mmse: 23.88, gds: 1.2, bmi: 22.2, status: 'Normal' },
       { id: 'P1001', age: 79, gender: 'Female', lang: 'Hindi', region: 'Urban', mmse: 20.73, gds: 11.5, bmi: 22.9, status: 'Normal' },
       { id: 'P1002', age: 88, gender: 'Female', lang: 'Mizo', region: 'Urban', mmse: 19.32, gds: 2.85, bmi: 31.4, status: 'MCI Stage' },
-      { id: 'P1003', age: 74, gender: 'Female', lang: 'Khasi', region: 'Urban', mmse: 19.05, gds: 7.87, bmi: 28.4, status: 'MCI Stage' },
-      { id: 'P1004', age: 70, gender: 'Male', lang: 'English', region: 'Urban', mmse: 17.37, gds: 7.76, bmi: 29.0, status: 'High Risk' },
-      { id: 'P1005', age: 67, gender: 'Male', lang: 'Assamese', region: 'Rural (NER)', mmse: 16.58, gds: 1.32, bmi: 25.8, status: 'High Risk' },
-      { id: 'P1006', age: 88, gender: 'Male', lang: 'Hindi', region: 'Rural (NER)', mmse: 30.00, gds: 5.53, bmi: 30.0, status: 'Normal' },
-      { id: 'P1007', age: 80, gender: 'Female', lang: 'Mizo', region: 'Rural (NER)', mmse: 22.62, gds: 7.72, bmi: 29.3, status: 'Normal' }
+      { id: 'P1003', age: 74, gender: 'Female', lang: 'Khasi', region: 'Urban', mmse: 19.05, gds: 7.87, bmi: 28.4, status: 'MCI Stage' }
     ];
 
     function setRoleMode(mode) {
@@ -388,13 +418,20 @@
       }
     }
 
+    function setGameDeck(type) {
+      gameDeckType = type;
+      document.getElementById('deck-btn-family').className = type === 'family' ? "px-2.5 py-1 text-[11px] font-bold rounded-lg bg-indigo-600 text-white shadow-sm" : "px-2.5 py-1 text-[11px] font-bold rounded-lg text-[var(--muted-foreground)]";
+      document.getElementById('deck-btn-symbols').className = type === 'symbols' ? "px-2.5 py-1 text-[11px] font-bold rounded-lg bg-indigo-600 text-white shadow-sm" : "px-2.5 py-1 text-[11px] font-bold rounded-lg text-[var(--muted-foreground)]";
+      resetGame();
+    }
+
     function changeLanguage(lang) {
       selectedLang = lang;
       const dict = languagePrompts[lang] || languagePrompts['english'];
 
       document.getElementById('app-header-title').innerText = dict.headerTitle;
       document.getElementById('app-header-sub').innerText = dict.headerSub;
-      document.getElementById('game-title').innerText = dict.gameTitle;
+      document.getElementById('game-title').innerText = gameDeckType === 'family' ? dict.gameTitleFamily : dict.gameTitleSymbols;
       document.getElementById('game-instruction').innerText = dict.gameInstruction;
       document.getElementById('btn-restart').innerText = dict.btnRestart;
 
@@ -413,29 +450,28 @@
       document.getElementById('hud-errors').innerText = '0';
       document.getElementById('hud-accuracy').innerText = '100%';
 
-      let pairCount = 4;
-      if (currentDifficulty === 'easy') {
-        pairCount = 3;
-        gridContainer.className = "grid grid-cols-3 gap-3 min-h-[280px] p-2 bg-[var(--background)]/50 border border-[var(--border)]/50 rounded-xl items-center justify-center";
-      } else if (currentDifficulty === 'medium') {
-        pairCount = 4;
-        gridContainer.className = "grid grid-cols-4 gap-3 min-h-[280px] p-2 bg-[var(--background)]/50 border border-[var(--border)]/50 rounded-xl items-center justify-center";
-      } else {
-        pairCount = 6;
-        gridContainer.className = "grid grid-cols-4 gap-3 min-h-[280px] p-2 bg-[var(--background)]/50 border border-[var(--border)]/50 rounded-xl items-center justify-center";
-      }
+      let cardDeckSource = gameDeckType === 'family' ? familyPhotoCards : regionalSymbolCards;
+      let pairCount = currentDifficulty === 'easy' ? 3 : currentDifficulty === 'medium' ? 4 : 6;
+      gridContainer.className = `grid grid-cols-${pairCount === 3 ? 3 : 4} gap-3 min-h-[300px] p-2 bg-[var(--background)]/50 border border-[var(--border)]/50 rounded-xl items-center justify-center`;
 
-      let selectedSymbols = symbols.slice(0, pairCount);
-      let deck = [...selectedSymbols, ...selectedSymbols];
+      let selected = cardDeckSource.slice(0, pairCount);
+      let deck = [...selected, ...selected];
       deck.sort(() => Math.random() - 0.5);
 
-      deck.forEach((sym) => {
+      deck.forEach((item) => {
         const cardEl = document.createElement('div');
-        cardEl.className = "card-flip h-24 cursor-pointer select-none";
+        cardEl.className = "card-flip h-28 cursor-pointer select-none";
         cardEl.innerHTML = `
-          <div class="card-inner w-full h-full relative rounded-xl shadow-sm border border-[var(--border)] bg-[var(--card)] flex items-center justify-center text-2xl" data-symbol="${sym}" onclick="handleCardClick(this)">
-            <div class="card-front absolute inset-0 flex items-center justify-center font-bold text-indigo-500 bg-indigo-500/10 rounded-xl">❖</div>
-            <div class="card-back absolute inset-0 flex items-center justify-center bg-indigo-600 text-white rounded-xl">${sym}</div>
+          <div class="card-inner w-full h-full relative rounded-xl shadow-sm border border-[var(--border)] bg-[var(--card)] flex flex-col items-center justify-center" data-name="${item.name}" onclick="handleCardClick(this)">
+            <div class="card-front absolute inset-0 flex flex-col items-center justify-center font-bold text-indigo-500 bg-indigo-500/10 rounded-xl p-2">
+              <span class="text-3xl">❖</span>
+              <span class="text-[10px] text-[var(--muted-foreground)] mt-1 font-semibold">Tap to Reveal</span>
+            </div>
+            <div class="card-back absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br ${item.color} text-white rounded-xl p-2 text-center">
+              <span class="text-3xl">${item.emoji}</span>
+              <span class="text-xs font-bold mt-1">${item.name}</span>
+              <span class="text-[9px] opacity-80 uppercase">${item.tag}</span>
+            </div>
           </div>
         `;
         gridContainer.appendChild(cardEl);
@@ -464,10 +500,10 @@
         attempts++;
         document.getElementById('hud-attempts').innerText = attempts;
 
-        const sym1 = flippedCards[0].getAttribute('data-symbol');
-        const sym2 = flippedCards[1].getAttribute('data-symbol');
+        const name1 = flippedCards[0].getAttribute('data-name');
+        const name2 = flippedCards[1].getAttribute('data-name');
 
-        if (sym1 === sym2) {
+        if (name1 === name2) {
           flippedCards[0].classList.add('matched');
           flippedCards[1].classList.add('matched');
           flippedCards = [];
@@ -480,7 +516,7 @@
             flippedCards[1].classList.remove('flipped');
             flippedCards = [];
             evaluateAIInference();
-          }, 800);
+          }, 850);
         }
 
         const acc = Math.max(0, Math.round(((attempts - errors) / attempts) * 100));
@@ -492,20 +528,20 @@
       const acc = attempts > 0 ? (attempts - errors) / attempts : 1.0;
       const elapsedMs = startTime ? (Date.now() - startTime) : 10000;
       
+      const remSub = Math.min(100, Math.round((acc * 80) + 20));
       const memSub = Math.min(100, Math.round((acc * 70) + 30));
       const speedSub = Math.max(10, Math.round(100 - (elapsedMs / 1000)));
-      const execSub = Math.round((acc * 60) + 30);
       const recSub = Math.max(10, Math.round(100 - (errors * 10)));
 
-      let cps = (0.35 * memSub) + (0.25 * speedSub) + (0.25 * execSub) + (0.15 * recSub);
+      let cps = (0.30 * remSub) + (0.30 * memSub) + (0.20 * speedSub) + (0.20 * recSub);
       cps = Math.min(100, Math.max(10, Math.round(cps * 10) / 10));
 
       document.getElementById('cps-score-display').innerText = cps.toFixed(1);
       document.getElementById('cps-progress-bar').style.width = `${cps}%`;
 
+      document.getElementById('sub-reminiscence').innerText = `${remSub}.0 / 100`;
       document.getElementById('sub-memory').innerText = `${memSub}.0 / 100`;
       document.getElementById('sub-speed').innerText = `${speedSub}.0 / 100`;
-      document.getElementById('sub-executive').innerText = `${execSub}.0 / 100`;
       document.getElementById('sub-recovery').innerText = `${recSub}.0 / 100`;
 
       let nextDiff = 'medium';
@@ -514,18 +550,8 @@
 
       currentDifficulty = nextDiff;
       document.getElementById('ai-hidden-diff').innerText = `${nextDiff.toUpperCase()} (${nextDiff === 'easy' ? '3x4' : nextDiff === 'medium' ? '4x4' : '4x5'})`;
-      
-      const riskEl = document.getElementById('ai-risk-status');
-      if (cps < 50) {
-        riskEl.innerText = "High Risk / Impaired";
-        riskEl.className = "font-semibold text-rose-500";
-      } else {
-        riskEl.innerText = "Normal / Stable";
-        riskEl.className = "font-semibold text-emerald-500";
-      }
 
       updateEncouragement(nextDiff);
-      updateActivityRecommendation(cps, errors);
     }
 
     function updateEncouragement(diff) {
@@ -535,26 +561,6 @@
       if (diff === 'hard') activePromptEl.innerText = dict.hardPrompt;
       else if (diff === 'medium') activePromptEl.innerText = dict.mediumPrompt;
       else activePromptEl.innerText = dict.easyPrompt;
-    }
-
-    function updateActivityRecommendation(cps, errs) {
-      const titleEl = document.getElementById('rec-title');
-      const descEl = document.getElementById('rec-desc');
-      const catEl = document.getElementById('rec-category');
-
-      if (errs > 6 || cps < 50) {
-        catEl.innerText = "Rest & Caregiver Assist";
-        titleEl.innerText = "Calm Audio Reminiscence & Hydration Break";
-        descEl.innerText = "Listen to calming traditional North Eastern folk music and take a gentle hydration break.";
-      } else if (cps >= 75) {
-        catEl.innerText = "High Cognitive Challenge";
-        titleEl.innerText = "Advanced Spatial Recall & 4x5 Pattern Matrix";
-        descEl.innerText = "Challenging multi-object visual memory grids featuring regional flora and fauna.";
-      } else {
-        catEl.innerText = "Executive Function";
-        titleEl.innerText = "Dual-Task Rhythmic Tap & Sound Sequence";
-        descEl.innerText = "Combines auditory sound sequences with visual tap recall to strengthen working memory.";
-      }
     }
 
     function speakVoicePrompt() {
@@ -572,26 +578,46 @@
       evaluateAIInference();
     }
 
-    function simulateScenario(type) {
-      if (type === 'high') { attempts = 6; errors = 0; currentDifficulty = 'hard'; }
-      else if (type === 'mci') { attempts = 12; errors = 4; currentDifficulty = 'medium'; }
-      else { attempts = 16; errors = 9; currentDifficulty = 'easy'; }
-      
-      document.getElementById('hud-attempts').innerText = attempts;
-      document.getElementById('hud-errors').innerText = errors;
-      const acc = Math.round(((attempts - errors) / attempts) * 100);
-      document.getElementById('hud-accuracy').innerText = `${acc}%`;
-      evaluateAIInference();
+    function renderFamilyPhotoStudio() {
+      const studioGrid = document.getElementById('family-photos-grid');
+      studioGrid.innerHTML = '';
+      familyPhotoCards.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = `bg-gradient-to-br ${item.color} rounded-2xl p-5 text-white space-y-2 shadow-sm relative overflow-hidden`;
+        card.innerHTML = `
+          <div class="text-4xl">${item.emoji}</div>
+          <h3 class="text-lg font-bold">${item.name}</h3>
+          <span class="inline-block bg-white/20 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase">${item.tag}</span>
+          <p class="text-[11px] opacity-90">Audio voice tag active in ${selectedLang.toUpperCase()}</p>
+        `;
+        studioGrid.appendChild(card);
+      });
+    }
+
+    function addSampleFamilyPhoto() {
+      const name = prompt("Enter Family Member Name or Memory Title:", "Grandchild Maya");
+      if (name) {
+        familyPhotoCards.push({
+          name: name,
+          tag: "Family",
+          emoji: "👧",
+          color: "from-purple-600 to-indigo-700"
+        });
+        renderFamilyPhotoStudio();
+        resetGame();
+      }
     }
 
     function switchTab(tab) {
-      ['game', 'caregiver', 'kaggle'].forEach(t => {
-        document.getElementById(`section-${t}`).classList.add('hidden');
+      ['game', 'reminiscence', 'caregiver', 'kaggle'].forEach(t => {
+        const sec = document.getElementById(`section-${t}`);
+        if (sec) sec.classList.add('hidden');
         const btn = document.getElementById(`tab-${t}`);
         if (btn) btn.className = "flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]";
       });
 
-      document.getElementById(`section-${tab}`).classList.remove('hidden');
+      const activeSec = document.getElementById(`section-${tab}`);
+      if (activeSec) activeSec.classList.remove('hidden');
       const activeBtn = document.getElementById(`tab-${tab}`);
       if (activeBtn) activeBtn.className = "flex-1 px-3 py-1.5 text-xs font-bold rounded-lg bg-indigo-600 text-white shadow-sm";
     }
@@ -632,6 +658,7 @@
     // Init in Patient Mode
     setRoleMode('patient');
     initGame();
+    renderFamilyPhotoStudio();
     populateKaggleTable(kaggleData);
   </script>
 </body>
