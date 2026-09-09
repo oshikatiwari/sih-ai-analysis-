@@ -1,7 +1,7 @@
 # SIH26003: AI-Based Cognitive Gaming & Memory Assistance Platform
 
 **Ministry of Development of North Eastern Region (MDoNER) — Smart India Hackathon**  
-*Domain:* Space Technology / Offline AI Health Technology  
+*Domain:*  Offline AI Health Technology  
 *Target Users:* Elderly Dementia Patients & Caregivers in North Eastern Region (NER)
 
 ---
