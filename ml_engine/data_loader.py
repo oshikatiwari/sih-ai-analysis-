@@ -18,7 +18,7 @@ def generate_full_dataset():
     genders = np.random.choice(["Male", "Female"], n_samples)
     educations = np.random.choice([0, 1, 2, 3], n_samples, p=[0.2, 0.4, 0.25, 0.15])
     
-    # 5 Target Languages: Hindi, English, Mizo, Khasi, Assamese
+    # 5 Target Languages for North Eastern Region & India
     languages = np.random.choice(["Hindi", "English", "Mizo", "Khasi", "Assamese"], n_samples, p=[0.25, 0.25, 0.15, 0.15, 0.20])
     regions = np.random.choice(["Rural (NER)", "Urban (NER)", "Semi-Urban"], n_samples, p=[0.5, 0.3, 0.2])
     marital = np.random.choice(["Married", "Single", "Widowed", "Divorced"], n_samples)
@@ -59,9 +59,9 @@ def generate_full_dataset():
     clinical_df.to_csv(clinical_file, index=False)
     print(f"[+] Saved clinical dataset to {clinical_file} ({len(clinical_df)} records)")
 
-    # Extended Telemetry Dataset with Cognitive Sub-scores & Activity Recommendations
+    # Extended Telemetry Dataset with Micro-Game Telemetry & Multi-Domain Cognitive Subscores
     telemetry_records = []
-    game_types = ["memory_matching", "pattern_recognition"]
+    game_types = ["memory_matching", "pattern_recognition", "family_reminiscence"]
 
     for idx, row in clinical_df.iterrows():
         mmse = row["MMSE_Score"]
@@ -69,7 +69,7 @@ def generate_full_dataset():
         age = row["Age"]
         lang = row["Preferred_Language"]
 
-        num_sessions = np.random.randint(2, 5)
+        num_sessions = np.random.randint(3, 6)
         for s in range(num_sessions):
             g_type = np.random.choice(game_types)
             
@@ -77,32 +77,54 @@ def generate_full_dataset():
             accuracy = float(np.clip(base_acc, 0.25, 1.0))
             
             base_time = (35.0 - mmse) * 1500 + age * 120 + np.random.normal(0, 2000)
-            response_time_ms = int(np.clip(base_time, 15000, 180000))
+            response_time_ms = int(np.clip(base_time, 14000, 175000))
 
+            # Game-Specific Micro Telemetry Features
             if g_type == "memory_matching":
                 attempts = np.random.randint(8, 25)
                 errors = int(round(attempts * (1.0 - accuracy)))
                 hints = np.random.randint(0, 5) if accuracy < 0.7 else np.random.randint(0, 2)
-            else:
+                repeat_mismatches = int(round(errors * np.random.uniform(0.3, 0.7)))
+                spatial_proximity_error_score = round(float(np.random.uniform(1.0, 5.0) if errors > 2 else np.random.uniform(0.0, 1.0)), 2)
+                span_memory_capacity = int(np.clip(mmse / 4.0 + np.random.uniform(-1, 1), 3, 9))
+            elif g_type == "pattern_recognition":
                 attempts = np.random.randint(5, 15)
                 errors = int(round(attempts * (1.0 - accuracy)))
                 hints = np.random.randint(0, 4) if accuracy < 0.7 else np.random.randint(0, 2)
+                repeat_mismatches = int(round(errors * np.random.uniform(0.2, 0.5)))
+                spatial_proximity_error_score = round(float(np.random.uniform(0.5, 3.0)), 2)
+                span_memory_capacity = int(np.clip(mmse / 4.5 + np.random.uniform(-1, 1), 3, 8))
+            else: # family_reminiscence
+                attempts = np.random.randint(6, 16)
+                errors = int(round(attempts * (1.0 - accuracy * 0.8))) # Personal photos yield higher emotional accuracy
+                hints = np.random.randint(0, 2)
+                repeat_mismatches = int(round(errors * 0.2))
+                spatial_proximity_error_score = round(float(np.random.uniform(0.0, 2.0)), 2)
+                span_memory_capacity = int(np.clip(mmse / 3.5 + 1, 4, 10))
 
-            completion_rate = float(np.clip(accuracy + np.random.uniform(-0.1, 0.1), 0.3, 1.0))
+            completion_rate = float(np.clip(accuracy + np.random.uniform(-0.05, 0.1), 0.35, 1.0))
+            flip_latency_variance_ms = round(float(np.random.uniform(120, 850)), 2)
+            time_of_day_hour = np.random.randint(7, 21) # Session hour (07:00 to 21:00)
 
-            # Multi-domain Cognitive Sub-scores (0-100)
-            memory_retention_index = round(float(np.clip((accuracy * 70.0) + (completion_rate * 30.0) - (hints * 3.0), 10.0, 100.0)), 2)
-            reaction_latency_score = round(float(np.clip(100.0 - (response_time_ms / 1800.0), 10.0, 100.0)), 2)
-            executive_function_idx = round(float(np.clip((mmse / 30.0 * 50.0) + (accuracy * 50.0) - (errors * 2.0), 10.0, 100.0)), 2)
+            # Multi-Domain Sub-Scores (0-100)
+            memory_retention_index = round(float(np.clip((accuracy * 70.0) + (completion_rate * 30.0) - (hints * 2.5), 10.0, 100.0)), 2)
+            reaction_latency_score = round(float(np.clip(100.0 - (response_time_ms / 1750.0), 10.0, 100.0)), 2)
+            executive_function_idx = round(float(np.clip((mmse / 30.0 * 50.0) + (accuracy * 50.0) - (errors * 1.5), 10.0, 100.0)), 2)
             error_recovery_rate = round(float(np.clip(100.0 - (errors / max(attempts, 1) * 100.0), 10.0, 100.0)), 2)
+            autobiographical_reminiscence_score = round(float(np.clip(accuracy * 100.0 + (3.0 if g_type == "family_reminiscence" else 0.0), 10.0, 100.0)), 2)
 
-            # Enhanced Composite CPS Score
+            # High-Precision Composite CPS Score (0-100)
             cps_score = round(float(np.clip(
-                (0.35 * memory_retention_index) + 
+                (0.30 * memory_retention_index) + 
                 (0.25 * reaction_latency_score) + 
-                (0.25 * executive_function_idx) + 
-                (0.15 * error_recovery_rate), 5.0, 100.0
+                (0.20 * executive_function_idx) + 
+                (0.15 * error_recovery_rate) +
+                (0.10 * autobiographical_reminiscence_score), 5.0, 100.0
             )), 2)
+
+            # Functional Cognitive Age Calculation
+            cognitive_age_delta = round((50.0 - cps_score) * 0.18, 1)
+            cognitive_age = round(float(np.clip(age + cognitive_age_delta, 50.0, 95.0)), 1)
 
             # Hidden Adaptive Difficulty (Easy, Medium, Hard)
             if cps_score >= 72.0 and accuracy >= 0.80:
@@ -115,22 +137,29 @@ def generate_full_dataset():
             telemetry_records.append({
                 "participant_id": row["Participant_ID"],
                 "age": age,
+                "cognitive_age": cognitive_age,
                 "preferred_language": lang,
                 "education_level": row["Education_Level"],
                 "mmse_score": mmse,
                 "gds_score": row["GDS_Score"],
                 "cognitive_impairment_status": imp,
                 "game_type": g_type,
+                "time_of_day_hour": time_of_day_hour,
                 "accuracy": round(accuracy, 4),
                 "response_time_ms": response_time_ms,
                 "attempts": attempts,
                 "errors": errors,
+                "repeat_mismatches": repeat_mismatches,
+                "spatial_proximity_error_score": spatial_proximity_error_score,
+                "span_memory_capacity": span_memory_capacity,
+                "flip_latency_variance_ms": flip_latency_variance_ms,
                 "hints_used": hints,
                 "completion_rate": round(completion_rate, 4),
                 "memory_retention_index": memory_retention_index,
                 "reaction_latency_score": reaction_latency_score,
                 "executive_function_idx": executive_function_idx,
                 "error_recovery_rate": error_recovery_rate,
+                "autobiographical_reminiscence_score": autobiographical_reminiscence_score,
                 "cps_score": cps_score,
                 "next_adaptive_difficulty": difficulty
             })

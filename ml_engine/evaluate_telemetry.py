@@ -15,7 +15,7 @@ def run_evaluation_suite():
     analyzer = CPSAnalyzer()
 
     print("=========================================================================")
-    print(" SIH26003: Multi-Language AI & ML Telemetry Evaluation Test Suite")
+    print(" SIH26003: Multi-Language Ensemble AI Evaluation Test Suite (v3.0)")
     print(" Languages: Hindi, English, Mizo, Khasi, Assamese")
     print("=========================================================================\n")
 
@@ -40,23 +40,24 @@ def run_evaluation_suite():
             "attempts": sc["attempts"],
             "errors": sc["errors"],
             "hints_used": sc["hints"],
-            "completion_rate": sc["comp"]
+            "completion_rate": sc["comp"],
+            "time_of_day_hour": 10
         }
 
         res = analyzer.analyze_session(telemetry)
         sub = res["cognitive_sub_scores"]
-        trend = res["longitudinal_trend"]
-        recs = res["ai_activity_recommendations"]
+        proj = res["trajectory_projections"]
+        recs = res["caregiver_reminiscence_therapy"]
         
         print(f"Scenario {idx}: [{sc['name']}]")
         print(f"  * Input Telemetry : Lang={sc['lang']}, Accuracy={sc['accuracy']*100:.0f}%, Time={sc['time']/1000:.1f}s, Errors={sc['errors']}")
-        print(f"  * Composite CPS Score : {res['cps_score']} / 100.0")
-        print(f"  * Cognitive Sub-scores: Memory={sub['memory_retention_index']}, Speed={sub['reaction_latency_score']}, Executive={sub['executive_function_index']}, Recovery={sub['error_recovery_rate']}")
+        print(f"  * Composite CPS Score : {res['cps_score']} / 100.0 (Functional Cognitive Age: {res['functional_cognitive_age']} vs Age: {res['biological_age']})")
+        print(f"  * Cognitive Sub-scores: Memory={sub['memory_retention_index']}, Speed={sub['reaction_latency_score']}, Executive={sub['executive_function_index']}, Reminiscence={sub['autobiographical_reminiscence_score']}")
         print(f"  * Hidden Adaptive Diff: {res['hidden_adaptive_difficulty'].upper()} (Grid/Sequence Auto-Adjusted in Background)")
         print(f"  * Patient UI Badge    : NONE (Hidden to eliminate anxiety)")
         print(f"  * Active Guidance ({sc['lang'].upper()}): \"{res['patient_active_guidance']}\"")
-        print(f"  * Longitudinal Trend  : {trend['direction']} ({trend['clinical_summary']})")
-        print(f"  * AI Recommended Activity: {recs[0]['activity_name']} ({recs[0]['category']})")
+        print(f"  * 30d/90d AI Forecast : 30-Day Projected CPS: {proj['projected_cps_30_days']} | 90-Day Projected CPS: {proj['projected_cps_90_days']} ({proj['trajectory_status']})")
+        print(f"  * Family Reminiscence : {recs['reminiscence_status']} ({recs['caregiver_action_plan']})")
         print(f"  * Caregiver Risk      : {res['caregiver_dashboard']['cognitive_impairment_risk']} (Fatigue Index: {res['caregiver_dashboard']['fatigue_index']})")
         print("-" * 75)
 

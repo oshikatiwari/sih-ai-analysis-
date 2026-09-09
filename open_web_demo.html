@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SIH26003 - Caregiver Family Reminiscence & AI Platform</title>
+  <title>SIH26003 - Multilingual Ensemble AI Cognitive Platform</title>
   <script src="https://www.gstatic.com/antigravity/web/dev/tailwindcss.min.js"></script>
   <style>
     .card-flip { perspective: 1000px; }
@@ -25,7 +25,7 @@
           <span id="role-badge" class="bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 text-xs font-bold px-2.5 py-1 rounded-full border border-emerald-500/20">👴 Patient Mode (Simplified)</span>
         </div>
         <h1 id="app-header-title" class="text-2xl font-bold mt-2 text-[var(--foreground)]">AI Cognitive Gaming & Family Reminiscence Platform</h1>
-        <p id="app-header-sub" class="text-xs text-[var(--muted-foreground)] mt-1">Autobiographical Memory Therapy, 5-Language Audio Prompts & Clinical Analytics</p>
+        <p id="app-header-sub" class="text-xs text-[var(--muted-foreground)] mt-1">Ensemble ML (XGBoost + RF), Cognitive Age Calculator & 90-Day Trajectory Projections</p>
       </div>
 
       <!-- Controls: Role Selector & Language Selector -->
@@ -58,7 +58,7 @@
       <button id="tab-kaggle" onclick="switchTab('kaggle')" class="flex-1 px-3 py-1.5 text-xs font-bold rounded-lg text-[var(--muted-foreground)] hover:text-[var(--foreground)]">📁 Kaggle Dataset Explorer</button>
     </div>
 
-    <!-- TAB 1: PATIENT GAMEPLAY DEMO (Family Reminiscence & Cultural Mode) -->
+    <!-- TAB 1: PATIENT GAMEPLAY DEMO -->
     <main id="section-game" class="space-y-5">
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -118,22 +118,26 @@
         <!-- Caregiver/Evaluator AI Monitor Sidebar (Hidden in Patient Mode) -->
         <div id="ai-monitor-sidebar" class="hidden bg-[var(--card)] border border-[var(--border)] rounded-2xl p-5 space-y-4">
           <div class="flex items-center justify-between border-b border-[var(--border)] pb-2.5">
-            <h3 class="font-bold text-sm text-[var(--foreground)]">🤖 Real-Time AI ML Engine</h3>
-            <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded font-bold">XGBoost v2.5</span>
+            <h3 class="font-bold text-sm text-[var(--foreground)]">🤖 Ensemble AI ML Engine</h3>
+            <span class="text-[10px] font-mono bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded font-bold">XGB+RF Ensemble</span>
           </div>
 
           <!-- Live CPS Score & Gauge Breakdown -->
           <div class="space-y-3 bg-[var(--background)] border border-[var(--border)] p-4 rounded-xl">
             <div class="text-center">
               <span class="text-xs text-[var(--muted-foreground)] font-medium">Cognitive Performance Score (CPS)</span>
-              <div id="cps-score-display" class="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono my-1">86.5</div>
+              <div id="cps-score-display" class="text-4xl font-black text-indigo-600 dark:text-indigo-400 font-mono my-1">88.5</div>
               <div class="w-full bg-gray-200 dark:bg-gray-700 h-2 rounded-full overflow-hidden">
-                <div id="cps-progress-bar" class="bg-indigo-600 h-full transition-all duration-500" style="width: 86.5%;"></div>
+                <div id="cps-progress-bar" class="bg-indigo-600 h-full transition-all duration-500" style="width: 88.5%;"></div>
               </div>
             </div>
 
-            <!-- Cognitive Sub-scores Breakdown -->
+            <!-- Cognitive Sub-scores Breakdown & Cognitive Age -->
             <div class="grid grid-cols-2 gap-2 text-[11px] pt-2 border-t border-[var(--border)]">
+              <div>
+                <span class="text-[var(--muted-foreground)] block">Cognitive Age:</span>
+                <span id="sub-cog-age" class="font-mono font-bold text-indigo-500">66.5 yrs (vs 74)</span>
+              </div>
               <div>
                 <span class="text-[var(--muted-foreground)] block">Family Reminiscence:</span>
                 <span id="sub-reminiscence" class="font-mono font-bold text-amber-500">92.0 / 100</span>
@@ -143,12 +147,8 @@
                 <span id="sub-memory" class="font-mono font-bold text-indigo-500">88.5 / 100</span>
               </div>
               <div>
-                <span class="text-[var(--muted-foreground)] block">Reaction Speed:</span>
+                <span class="text-[var(--muted-foreground)] block">Reaction Latency:</span>
                 <span id="sub-speed" class="font-mono font-bold text-emerald-500">82.0 / 100</span>
-              </div>
-              <div>
-                <span class="text-[var(--muted-foreground)] block">Error Recovery:</span>
-                <span id="sub-recovery" class="font-mono font-bold text-purple-500">90.0 / 100</span>
               </div>
             </div>
           </div>
@@ -168,12 +168,23 @@
           <!-- AI Activity Recommendation Card -->
           <div class="bg-indigo-500/10 border border-indigo-500/20 p-3 rounded-xl space-y-1 text-xs">
             <div class="flex items-center justify-between font-bold text-indigo-600 dark:text-indigo-400">
-              <span>💡 AI Recommended Activity:</span>
+              <span>💡 AI Activity Recommendation:</span>
               <span id="rec-category" class="text-[10px] bg-indigo-500/20 px-1.5 py-0.5 rounded">Family Reminiscence</span>
             </div>
             <p id="rec-title" class="font-semibold text-[var(--foreground)]">Family Photo Match & Grandchild Voice Recording</p>
             <p id="rec-desc" class="text-[11px] text-[var(--muted-foreground)]">Pair family photo cards with voice prompts to evoke positive autobiographical recall.</p>
           </div>
+
+          <!-- Quick Patient Simulations -->
+          <div class="space-y-2 pt-1">
+            <span class="text-[11px] font-semibold text-[var(--muted-foreground)] block">Quick Simulations:</span>
+            <div class="grid grid-cols-3 gap-1.5 text-[10px]">
+              <button onclick="simulateScenario('high')" class="bg-[var(--background)] hover:bg-[var(--border)] border border-[var(--border)] p-1.5 rounded text-center font-medium">🌟 High Focus</button>
+              <button onclick="simulateScenario('mci')" class="bg-[var(--background)] hover:bg-[var(--border)] border border-[var(--border)] p-1.5 rounded text-center font-medium">⚠️ MCI Stage</button>
+              <button onclick="simulateScenario('fatigue')" class="bg-[var(--background)] hover:bg-[var(--border)] border border-[var(--border)] p-1.5 rounded text-center font-medium">🔴 High Fatigue</button>
+            </div>
+          </div>
+
         </div>
 
       </div>
@@ -211,13 +222,13 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-3 text-center">
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
             <span class="text-xs text-[var(--muted-foreground)]">Current Composite CPS</span>
-            <div class="text-2xl font-bold text-indigo-500 font-mono mt-1">82.5</div>
+            <div class="text-2xl font-bold text-indigo-500 font-mono mt-1">88.5</div>
             <span class="text-[10px] text-emerald-500">Upward Recovery Trajectory</span>
           </div>
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
             <span class="text-xs text-[var(--muted-foreground)]">Projected 30-Day CPS</span>
-            <div class="text-2xl font-bold text-emerald-500 font-mono mt-1">89.0</div>
-            <span class="text-[10px] text-emerald-500">+6.5 predicted gain</span>
+            <div class="text-2xl font-bold text-emerald-500 font-mono mt-1">94.8</div>
+            <span class="text-[10px] text-emerald-500">+6.3 predicted gain</span>
           </div>
           <div class="bg-[var(--background)] border border-[var(--border)] p-3.5 rounded-xl">
             <span class="text-xs text-[var(--muted-foreground)]">Optimal Peak Exercise Window</span>
@@ -242,10 +253,10 @@
             <div class="bg-indigo-500/80 rounded-t w-full h-[62%]" title="Session 2: 62"></div>
             <div class="bg-indigo-500/80 rounded-t w-full h-[66%]" title="Session 3: 66"></div>
             <div class="bg-indigo-500/80 rounded-t w-full h-[70%]" title="Session 4: 70"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[75%]" title="Session 5: 75"></div>
-            <div class="bg-indigo-500/80 rounded-t w-full h-[82%]" title="Session 6: 82"></div>
-            <div class="bg-emerald-500/70 border-t-2 border-dashed border-emerald-400 rounded-t w-full h-[88%]" title="AI Projected 30 Days: 88"></div>
-            <div class="bg-emerald-500/70 border-t-2 border-dashed border-emerald-400 rounded-t w-full h-[95%]" title="AI Projected 90 Days: 95"></div>
+            <div class="bg-indigo-500/80 rounded-t w-full h-[78%]" title="Session 5: 78"></div>
+            <div class="bg-indigo-500/80 rounded-t w-full h-[88%]" title="Session 6: 88.5"></div>
+            <div class="bg-emerald-500/70 border-t-2 border-dashed border-emerald-400 rounded-t w-full h-[94%]" title="AI Projected 30 Days: 94.8"></div>
+            <div class="bg-emerald-500/70 border-t-2 border-dashed border-emerald-400 rounded-t w-full h-[99%]" title="AI Projected 90 Days: 99.5"></div>
           </div>
           <div class="flex justify-between text-[10px] text-[var(--muted-foreground)] px-1">
             <span>Past Sessions</span>
@@ -263,7 +274,7 @@
         <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div>
             <h2 class="text-xl font-bold text-[var(--foreground)]">Kaggle Clinical & Game Telemetry Dataset Explorer</h2>
-            <p class="text-xs text-[var(--muted-foreground)]">1,500 Clinical Patient Records & 4,499 Game Session Telemetry Records (SIH Audit)</p>
+            <p class="text-xs text-[var(--muted-foreground)]">1,500 Clinical Patient Records & 5,989 Game Session Telemetry Records (SIH Audit)</p>
           </div>
           <input type="text" id="search-kaggle" oninput="filterKaggleTable()" placeholder="Search ID, Language, Status..." class="bg-[var(--background)] border border-[var(--border)] text-xs rounded-lg px-3 py-2 w-full md:w-64 focus:outline-none focus:border-indigo-500">
         </div>
@@ -296,7 +307,7 @@
     const languagePrompts = {
       english: {
         headerTitle: "AI Cognitive Gaming & Family Reminiscence Platform",
-        headerSub: "Autobiographical Memory Therapy, 5-Language Audio Prompts & Clinical Analytics",
+        headerSub: "Ensemble ML (XGBoost + RF), Cognitive Age Calculator & 90-Day Trajectory Projections",
         gameTitleFamily: "Family Memory Matching Journey",
         gameTitleSymbols: "Cultural Symbols Matching Journey",
         gameInstruction: "Tap matching pairs of family memories and regional symbols",
@@ -307,7 +318,7 @@
       },
       hindi: {
         headerTitle: "एआई संज्ञानात्मक गेमिंग और पारिवारिक स्मृति संस्मरण मंच",
-        headerSub: "आत्मकथात्मक स्मृति थेरेपी, 5-भाषा ऑडियो संकेत और नैदानिक विश्लेषण",
+        headerSub: "एंसेम्बल एमएल (XGBoost + RF), संज्ञानात्मक आयु कैलकुलेटर और 90-दिवसीय प्रगति अनुमान",
         gameTitleFamily: "पारिवारिक यादें मिलान यात्रा",
         gameTitleSymbols: "सांस्कृतिक प्रतीक मिलान यात्रा",
         gameInstruction: "पारिवारिक यादों के मिलते-जुलते जोड़ों पर टैप करें",
@@ -318,7 +329,7 @@
       },
       assamese: {
         headerTitle: "এআই সংজ্ঞাত্নক গেমিং আৰু পৰিয়ালৰ স্মৃতি মঞ্চ",
-        headerSub: "আত্মজীৱনীমূলক স্মৃতি থেৰাপী, ৫-ভাষাৰ অডিঅ' নিৰ্দেশনা আৰু বিশ্লেষণ",
+        headerSub: "এনচেম্বল এআই (XGBoost + RF), মানসিক বয়স গণক আৰু ৯০-দুখীয়া অগ্ৰগতি পূৰ্বানুমান",
         gameTitleFamily: "পৰিয়ালৰ স্মৃতি মিলন যাত্ৰা",
         gameTitleSymbols: "সাংস্কৃতিক প্ৰতীক মিলন যাত্ৰা",
         gameInstruction: "পৰিয়ালৰ স্মৃতিৰ মিল থকা যোৰাবোৰত টেপ কৰক",
@@ -353,7 +364,7 @@
 
     let selectedLang = 'english';
     let currentRoleMode = 'patient';
-    let gameDeckType = 'family'; // 'family' vs 'symbols'
+    let gameDeckType = 'family';
 
     const familyPhotoCards = [
       { name: "Grandson Aarav", tag: "Grandson", emoji: "👶", color: "from-blue-500 to-indigo-600" },
@@ -536,13 +547,16 @@
       let cps = (0.30 * remSub) + (0.30 * memSub) + (0.20 * speedSub) + (0.20 * recSub);
       cps = Math.min(100, Math.max(10, Math.round(cps * 10) / 10));
 
+      const cogAgeDelta = Math.round((50.0 - cps) * 0.18 * 10) / 10;
+      const cogAge = Math.min(95, Math.max(50, (74 + cogAgeDelta).toFixed(1)));
+
       document.getElementById('cps-score-display').innerText = cps.toFixed(1);
       document.getElementById('cps-progress-bar').style.width = `${cps}%`;
 
+      document.getElementById('sub-cog-age').innerText = `${cogAge} yrs (vs 74)`;
       document.getElementById('sub-reminiscence').innerText = `${remSub}.0 / 100`;
       document.getElementById('sub-memory').innerText = `${memSub}.0 / 100`;
       document.getElementById('sub-speed').innerText = `${speedSub}.0 / 100`;
-      document.getElementById('sub-recovery').innerText = `${recSub}.0 / 100`;
 
       let nextDiff = 'medium';
       if (cps >= 75 && acc >= 0.8) nextDiff = 'hard';
