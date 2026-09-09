@@ -27,13 +27,17 @@ def train_and_export_models():
     game_type_le = LabelEncoder()
     df["game_type_encoded"] = game_type_le.fit_transform(df["game_type"])
 
+    lang_le = LabelEncoder()
+    df["language_encoded"] = lang_le.fit_transform(df["preferred_language"])
+
     difficulty_map = {"easy": 0, "medium": 1, "hard": 2}
     df["difficulty_target"] = df["next_adaptive_difficulty"].map(difficulty_map)
 
-    # Features for CPS Regressor & Adaptive Difficulty Classifier
+    # Feature Columns
     feature_cols = [
         "age",
         "education_level",
+        "language_encoded",
         "mmse_score",
         "gds_score",
         "game_type_encoded",
@@ -53,11 +57,9 @@ def train_and_export_models():
     y_diff = df["difficulty_target"]
     y_impairment = df["cognitive_impairment_status"]
 
-    # Scale numerical features
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X)
 
-    # Train / Test Splits for CPS & Difficulty
     X_train, X_test, y_cps_train, y_cps_test, y_diff_train, y_diff_test, y_imp_train, y_imp_test = train_test_split(
         X_scaled, y_cps, y_diff, y_impairment, test_size=0.2, random_state=42
     )
@@ -101,23 +103,23 @@ def train_and_export_models():
     imp_acc = accuracy_score(y_imp_test, y_imp_pred)
     print(f"[+] Impairment Classifier Accuracy: {imp_acc * 100:.2f}%")
 
-    # Export Artifacts
+    # Save artifacts
     joblib.dump(cps_model, os.path.join(models_dir, "cps_regressor.pkl"))
     joblib.dump(diff_model, os.path.join(models_dir, "difficulty_classifier.pkl"))
     joblib.dump(imp_model, os.path.join(models_dir, "impairment_classifier.pkl"))
     joblib.dump(scaler, os.path.join(models_dir, "scaler.pkl"))
     joblib.dump(game_type_le, os.path.join(models_dir, "game_type_encoder.pkl"))
+    joblib.dump(lang_le, os.path.join(models_dir, "language_encoder.pkl"))
 
-    # Export JSON Metadata for Offline Mobile Fallback
     meta_info = {
-        "model_version": "1.0.0",
+        "model_version": "2.0.0",
         "sih_problem_statement": "SIH26003",
+        "supported_languages": ["Hindi", "English", "Mizo", "Khasi", "Assamese"],
         "feature_cols": feature_cols,
         "difficulty_mapping": {"0": "easy", "1": "medium", "2": "hard"},
         "cps_r2_score": round(float(r2), 4),
         "difficulty_accuracy": round(float(acc), 4),
         "impairment_accuracy": round(float(imp_acc), 4),
-        "ner_patient_ui_rule": "NEVER show difficulty badges (Easy/Medium/Hard) to patient. Use warm NER encouragement.",
         "scaler_means": scaler.mean_.tolist(),
         "scaler_scales": scaler.scale_.tolist()
     }
@@ -125,7 +127,7 @@ def train_and_export_models():
     with open(os.path.join(models_dir, "model_metadata.json"), "w") as f:
         json.dump(meta_info, f, indent=4)
 
-    print(f"\n[+] All ML models successfully saved to {models_dir}")
+    print(f"\n[+] All ML models successfully trained & saved to {models_dir}")
 
 if __name__ == "__main__":
     train_and_export_models()
