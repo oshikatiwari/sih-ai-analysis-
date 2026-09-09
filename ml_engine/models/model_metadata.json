@@ -1,0 +1,61 @@
+{
+    "model_version": "1.0.0",
+    "sih_problem_statement": "SIH26003",
+    "feature_cols": [
+        "age",
+        "education_level",
+        "mmse_score",
+        "gds_score",
+        "game_type_encoded",
+        "accuracy",
+        "response_time_ms",
+        "attempts",
+        "errors",
+        "hints_used",
+        "completion_rate",
+        "accuracy_speed_ratio",
+        "error_rate",
+        "cognitive_efficiency_idx"
+    ],
+    "difficulty_mapping": {
+        "0": "easy",
+        "1": "medium",
+        "2": "hard"
+    },
+    "cps_r2_score": 0.9983,
+    "difficulty_accuracy": 0.9933,
+    "impairment_accuracy": 0.8105,
+    "ner_patient_ui_rule": "NEVER show difficulty badges (Easy/Medium/Hard) to patient. Use warm NER encouragement.",
+    "scaler_means": [
+        74.55858067395671,
+        1.3488060700736442,
+        21.32133452354385,
+        5.31275831287659,
+        0.49118500334746706,
+        0.6834041508591832,
+        29460.636911403704,
+        12.879714349475563,
+        4.093952242802946,
+        1.202187011827717,
+        0.6826479580450792,
+        0.02554743589090633,
+        0.3172598073423233,
+        0.4815254483954474
+    ],
+    "scaler_scales": [
+        8.977679089931634,
+        0.9516093689587838,
+        4.35429119641224,
+        2.9699054807248286,
+        0.4999222897951399,
+        0.12238985456893314,
+        6892.689906415813,
+        5.193685891413448,
+        2.4204111458807493,
+        1.1992725020177777,
+        0.13545614425762542,
+        0.010844306147613518,
+        0.1257057988805458,
+        0.1719841806600218
+    ]
+}
